@@ -140,14 +140,14 @@ class CompareImage(object):
                 self.convert_mupdf_to_opencv_image(resolution=self.MINIMUM_OCR_RESOLUTION)
             elif (self.extension == '.ps') :
                 try:
-                    self.convert_ps_to_opencv_image(resolution=self.MINIMUM_OCR_RESOLUTION)
-                except:
                     self.convert_pywand_to_opencv_image(resolution=self.MINIMUM_OCR_RESOLUTION)
+                except:
+                    self.convert_ps_to_opencv_image(resolution=self.MINIMUM_OCR_RESOLUTION)
             elif self.extension == '.pcl':
                 try:
-                    self.convert_pcl_to_opencv_image(resolution=self.MINIMUM_OCR_RESOLUTION)
-                except:
                     self.convert_pywand_to_opencv_image(resolution=self.MINIMUM_OCR_RESOLUTION)
+                except:
+                    self.convert_pcl_to_opencv_image(resolution=self.MINIMUM_OCR_RESOLUTION)
             else:
                 scale = self.MINIMUM_OCR_RESOLUTION / self.DPI # percent of original size
                 width = int(self.opencv_images[0].shape[1] * scale)
@@ -463,15 +463,15 @@ class CompareImage(object):
             self.convert_mupdf_to_opencv_image()
         elif (self.extension=='.ps'):
             try:
-                self.convert_ps_to_opencv_image()
-            except:
                 self.convert_pywand_to_opencv_image()
+            except:
+                self.convert_ps_to_opencv_image()
             
         elif self.extension=='.pcl':
             try:
-                self.convert_pcl_to_opencv_image()
-            except:
                 self.convert_pywand_to_opencv_image()
+            except:
+                self.convert_pcl_to_opencv_image()
         else:
             self.DPI = 72
             img = cv2.imread(self.image)
@@ -528,7 +528,9 @@ class CompareImage(object):
         tic = time.perf_counter()
         try:
             self.mupdfdoc = fitz.open()
-            for image in os.listdir(output_image_directory):  
+            file_num = len(os.listdir(output_image_directory))
+            for index in range(file_num) :
+                image =  'output-' + str(index+1)+'.pdf'
                 image_file =os.path.join(output_image_directory, image)
                 singleDoc = fitz.open(image_file)
                 zoom = resolution/72
@@ -580,7 +582,9 @@ class CompareImage(object):
 
         try:
             self.mupdfdoc = fitz.open()
-            for image in os.listdir(output_image_directory):  
+            file_num = len(os.listdir(output_image_directory))
+            for index in range(file_num):
+                image =  'output-' + str(index+1)+'.pdf'
                 image_file =os.path.join(output_image_directory, image)
                 singleDoc = fitz.open(image_file)
                 zoom = resolution/72
